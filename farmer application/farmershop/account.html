@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account Shop</title>
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0; padding: 0;
+  background: #f3f7f2;
+}
+header {
+  background: #56ab2f;
+  color: white;
+  padding: 12px 20px;
+  display: flex;  align-items: center; 
+  gap: 1080px;
+}
+header h1 { margin: 0; font-size: 22px; }
+
+.lang-buttons img {
+  width: 28px; height: 28px;
+  margin-left: 8px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+.lang-buttons img:hover {
+  border-color: yellow;
+}
+
+.main { padding: 20px; display: flex; flex-direction: column; align-items: left; }
+.main button {
+  width: 150px; margin: 10px 0; padding: 12px;
+  border: none; border-radius: 8px; background: #2d572c; color: white;
+  cursor: pointer; font-size: 16px;
+  align-items: left;
+  justify-items: left;
+    text-align: left;
+    border: 2px solid #628062;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="headerTitle">Account Shop</h1>
+  <div class="lang-buttons">
+    <img src="globe.svg" alt="English" title="English" onclick="setLang('en')">English
+    <img src="globe.svg" alt="Hindi" title="Hindi" onclick="setLang('hi')">Hindi
+    <img src="globe.svg" alt="Marathi" title="Marathi" onclick="setLang('mr')">Marathi
+  </div>
+</header>
+
+<div class="main">
+  <button onclick="openPrivacy()" id="privacyBtn">Privacy Policy</button>
+  <button onclick="openSupport()" id="supportBtn">Customer Support</button>
+  <p id="welcomeText">Welcome to Account Shop!</p>
+</div>
+
+<script>
+const langData = {
+  en: {
+    headerTitle: "Account Shop",
+    welcomeText: "Welcome to Account Shop!",
+    privacyBtn: "Privacy Policy",
+    supportBtn: "Customer Support"
+  },
+  hi: {
+    headerTitle: "अकाउंट शॉप",
+    welcomeText: "अकाउंट शॉप में आपका स्वागत है!",
+    privacyBtn: "गोपनीयता नीति",
+    supportBtn: "ग्राहक सहायता"
+  },
+  mr: {
+    headerTitle: "अकाउंट शॉप",
+    welcomeText: "अकाउंट शॉप मध्ये आपले स्वागत आहे!",
+    privacyBtn: "गोपनीयता धोरण",
+    supportBtn: "ग्राहक समर्थन"
+  }
+};
+
+// Load saved language or default
+let currentLang = localStorage.getItem("lang") || "en";
+
+function updateLanguage() {
+  document.getElementById("headerTitle").innerText = langData[currentLang].headerTitle;
+  document.getElementById("welcomeText").innerText = langData[currentLang].welcomeText;
+  document.getElementById("privacyBtn").innerText = langData[currentLang].privacyBtn;
+  document.getElementById("supportBtn").innerText = langData[currentLang].supportBtn;
+}
+
+function setLang(lang){
+  currentLang = lang;
+  localStorage.setItem("lang", lang);
+  updateLanguage();
+}
+
+function openPrivacy(){
+  window.location.href = "privacy.html"; // Replace with your privacy page
+}
+
+function openSupport(){
+  window.location.href = "support.html"; // Replace with your support page
+}
+
+// Initialize language on page load
+updateLanguage();
+</script>
+
+</boglobe.svg

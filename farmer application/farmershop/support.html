@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Help Center — Farmer ⇄ Hotel Marketplace</title>
+<style>
+:root{
+  --bg:#0f1724; --card:#0b1220; --accent:#00c2a8; --muted:#94a3b8; --glass: rgba(255,255,255,0.03);
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+*{box-sizing:border-box}
+body{margin:0; background:linear-gradient(180deg,#071023 0%, #081422 100%); color:#e6eef6; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:32px}
+
+.help-wrap{width:100%; max-width:960px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px; box-shadow: 0 10px 30px rgba(2,6,23,0.7); padding:28px; border:1px solid rgba(255,255,255,0.03);}
+.help-header{display:flex; gap:16px; align-items:center; position:relative;}
+.logo{width:64px; height:64px; border-radius:10px; background:linear-gradient(135deg,var(--accent), #3be0c7); display:flex; align-items:center; justify-content:center; font-weight:700; color:#052224}
+.title{flex:1}
+.title h1{margin:0; font-size:20px}
+.title p{margin:4px 0 0; color:var(--muted); font-size:13px}
+
+.lang-buttons{position:absolute; right:0; top:0; display:flex; gap:8px;}
+.lang-buttons img{width:28px; height:28px; cursor:pointer; border:2px solid white; border-radius:50%;}
+.lang-buttons img:hover{border-color:yellow;}
+
+.search{margin-top:18px; display:flex; gap:12px}
+.search input{flex:1; padding:12px 14px; background:var(--glass); border-radius:10px; border:1px solid rgba(255,255,255,0.03); color:inherit; outline:none}
+.search button{padding:12px 16px; border-radius:10px; border:none; background:var(--accent); color:#042226; font-weight:600; cursor:pointer}
+
+.grid{display:grid; grid-template-columns: 1fr 320px; gap:18px; margin-top:20px}
+.card{background:rgba(255,255,255,0.02); padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.02)}
+.card h3{margin:0 0 10px}
+.faq-item{padding:10px; border-radius:8px; background:rgba(0,0,0,0.12); margin-bottom:10px}
+.category-list{display:flex; flex-wrap:wrap; gap:8px}
+.chip{background:rgba(255,255,255,0.03); padding:8px 10px; border-radius:999px; font-size:13px; color:var(--muted); border:1px solid rgba(255,255,255,0.02); cursor:pointer}
+
+.contact{display:flex; flex-direction:column; gap:12px}
+.contact button{padding:12px; border-radius:10px; border:none; cursor:pointer}
+.btn-primary{background:var(--accent); color:#042226; font-weight:700}
+.btn-ghost{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04)}
+
+.quick-stats{display:flex; gap:10px}
+.stat{flex:1; padding:10px; border-radius:8px; background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); text-align:center}
+.stat small{display:block;color:var(--muted)}
+
+footer{margin-top:18px; color:var(--muted); font-size:12px}
+
+.modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,6,23,0.5);}
+.modal.open{display:flex}
+.modal-card{width:100%; max-width:520px; background:#041226; padding:18px; border-radius:12px; border:1px solid rgba(255,255,255,0.03)}
+.modal-card h4{margin:0 0 8px}
+.form-row{display:flex; gap:8px}
+.form-row input, textarea{flex:1; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:transparent; color:inherit}
+textarea{min-height:100px}
+
+@media (max-width:880px){.grid{grid-template-columns:1fr;}.help-wrap{padding:18px}}
+</style>
+</head>
+<body>
+<div class="help-wrap">
+  <div class="help-header">
+    <div class="logo">N</div>
+    <div class="title">
+      <h1 id="helpTitle">Help Center — Fresh-Connect</h1>
+      <p id="helpDesc">Support for Farmers, Hotels & Retailers • Quick answers, guides & contact</p>
+    </div>
+    <div class="lang-buttons">
+      <img src="globe.svg" alt="English" title="English" onclick="setLang('en')">English
+      <img src="globe.svg" alt="Hindi" title="Hindi" onclick="setLang('hi')">Hindi
+      <img src="globe.svg" alt="Marathi" title="Marathi" onclick="setLang('mr')">Marathi
+    </div>
+  </div>
+
+  <div class="search">
+    <input id="search" placeholder="Search help (eg: 'register as farmer', 'refund')" />
+    <button id="searchBtn">Search</button>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="card">
+        <h3 id="popularQTitle">Popular Questions</h3>
+        <div class="faq-item"><strong id="q1">How do I register as a farmer?</strong><div id="a1" style="color:var(--muted); font-size:13px">Create a profile → Upload KYC → Add inventory</div></div>
+        <div class="faq-item"><strong id="q2">How do hotels place bulk orders?</strong><div id="a2" style="color:var(--muted); font-size:13px">Use 'Place Order' → Choose delivery slot → Confirm payment</div></div>
+        <div class="faq-item"><strong id="q3">What payment methods are supported?</strong><div id="a3" style="color:var(--muted); font-size:13px">UPI, Netbanking, Credit/Debit, Wallets</div></div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3 id="categoriesTitle">Categories</h3>
+        <div class="category-list">
+          <div class="chip" id="cat1">Getting Started</div>
+          <div class="chip" id="cat2">Orders & Delivery</div>
+          <div class="chip" id="cat3">Payments</div>
+          <div class="chip" id="cat4">KYC & Verification</div>
+          <div class="chip" id="cat5">Logistics</div>
+          <div class="chip" id="cat6">Technical Help</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:14px">
+        <h3 id="tutorialTitle">Tutorial</h3>
+        <p id="tutorialDesc" style="color:var(--muted); margin:0">Quick walkthrough for first-time users.</p>
+      </div>
+
+      <footer id="footerText">Need more? Use the contact panel to raise a ticket or chat with us on WhatsApp.</footer>
+    </div>
+
+    <div>
+      <div class="card contact">
+        <h3 id="contactTitle">Contact Support</h3>
+        <div class="quick-stats">
+          <div class="stat"><div style="font-size:18px; font-weight:700">24/7</div><small>Chat</small></div>
+          <div class="stat"><div style="font-size:18px; font-weight:700">4 hr</div><small>Avg response</small></div>
+          <div class="stat"><div style="font-size:18px; font-weight:700">99%</div><small>satisfaction</small></div>
+        </div>
+        <button class="btn-primary" id="openTicket">Raise a Ticket</button>
+        <button class="btn-ghost" onclick="window.open('https://wa.me/917900192766','_blank')">WhatsApp Support</button>
+        <div style="margin-top:10px; color:var(--muted); font-size:13px" id="phoneText">Prefer phone Call: +917900192766</div>
+      </div>
+
+      <div class="card" style="margin-top:12px">
+        <h3 id="quickLinksTitle">Quick Links</h3>
+        <ul style="margin:8px 0 0; padding-left:18px; color:var(--muted)">
+          <li id="link1">Refund Policy</li>
+          <li id="link2">Cancellation Policy</li>
+          <li id="link3">Delivery Terms</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for raising ticket -->
+<div id="modal" class="modal" role="dialog" aria-hidden="true">
+  <div class="modal-card">
+    <h4 id="ticketTitle">Raise Support Ticket</h4>
+    <div style="color:var(--muted); font-size:13px; margin-bottom:8px" id="ticketDesc">Describe your issue — our team will respond soon.</div>
+    <div class="form-row">
+      <input id="name" placeholder="Your name" />
+      <input id="phoneModal" placeholder="Phone / WhatsApp" />
+    </div>
+    <div style="height:8px"></div>
+    <textarea id="message" placeholder="Issue details..."></textarea>
+    <div style="height:10px"></div>
+    <div style="display:flex; gap:8px; justify-content:flex-end">
+      <button class="btn-ghost" id="closeModal">Cancel</button>
+      <button class="btn-primary" id="submitTicket">Submit</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const langData = {
+  en: {
+    helpTitle: "Help Center — Fresh-Connect",
+    helpDesc: "Support for Farmers, Hotels & Retailers • Quick answers, guides & contact",
+    popularQTitle: "Popular Questions",
+    q1: "How do I register as a farmer?",
+    a1: "Create a profile → Upload KYC → Add inventory",
+    q2: "How do hotels place bulk orders?",
+    a2: "Use 'Place Order' → Choose delivery slot → Confirm payment",
+    q3: "What payment methods are supported?",
+    categoriesTitle: "Categories",
+    cat1: "Getting Started", cat2:"Orders & Delivery", cat3:"Payments", cat4:"KYC & Verification", cat5:"Logistics", cat6:"Technical Help",
+    tutorialTitle:"Tutorial", tutorialDesc:"Quick walkthrough for first-time users.",
+    footerText:"Need more? Use the contact panel to raise a ticket or chat with us on WhatsApp.",
+    contactTitle:"Contact Support",
+    phoneText:"Prefer phone? Call: +91 99999 99999",
+    quickLinksTitle:"Quick Links", link1:"Refund Policy", link2:"Cancellation Policy", link3:"Delivery Terms",
+    ticketTitle:"Raise Support Ticket", ticketDesc:"Describe your issue — our team will respond soon."
+  },
+  hi: {
+    helpTitle: "सहायता केंद्र — NinjaFarm Connect",
+    helpDesc: "किसानों, होटलों और रिटेलर्स के लिए समर्थन • त्वरित उत्तर, मार्गदर्शिकाएँ और संपर्क",
+    popularQTitle: "लोकप्रिय प्रश्न",
+    q1: "मैं किसान के रूप में कैसे पंजीकृत करूँ?",
+    a1: "प्रोफाइल बनाएँ → KYC अपलोड करें → इन्वेंट्री जोड़ें",
+    q2: "होटल बड़े ऑर्डर कैसे करते हैं?",
+    a2: "'Place Order' का उपयोग करें → डिलीवरी स्लॉट चुनें → भुगतान पुष्टि करें",
+    q3: "कौन से भुगतान तरीके समर्थित हैं?",
+    categoriesTitle: "श्रेणियाँ",
+    cat1: "शुरुआत", cat2:"ऑर्डर और डिलीवरी", cat3:"भुगतान", cat4:"KYC और सत्यापन", cat5:"लॉजिस्टिक्स", cat6:"तकनीकी सहायता",
+    tutorialTitle:"ट्यूटोरियल", tutorialDesc:"प्रथम-बार उपयोगकर्ताओं के लिए त्वरित मार्गदर्शन।",
+    footerText:"और अधिक चाहिए? टिकट दर्ज करें या WhatsApp पर चैट करें।",
+    contactTitle:"सहायता संपर्क",
+    phoneText:"फोन? कॉल करें: +91 99999 99999",
+    quickLinksTitle:"त्वरित लिंक", link1:"वापसी नीति", link2:"रद्द करने की नीति", link3:"डिलीवरी की शर्तें",
+    ticketTitle:"सहायता टिकट दर्ज करें", ticketDesc:"अपनी समस्या का वर्णन करें — हमारी टीम शीघ्र प्रतिक्रिया देगी।"
+  },
+  mr: {
+    helpTitle: "सहायता केंद्र — NinjaFarm Connect",
+    helpDesc: "शेतकरी, हॉटेल्स आणि रिटेलर्स साठी समर्थन • त्वरित उत्तर, मार्गदर्शन आणि संपर्क",
+    popularQTitle: "लोकप्रिय प्रश्न",
+    q1: "मी शेतकरी म्हणून कसा नोंदणी करतो?",
+    a1: "प्रोफाइल तयार करा → KYC अपलोड करा → इन्व्हेंटरी जोडा",
+    q2: "हॉटेल मोठे ऑर्डर कसे करतात?",
+    a2: "'Place Order' वापरा → डिलिव्हरी स्लॉट निवडा → पेमेंट पुष्टी करा",
+    q3: "कोणते पेमेंट पद्धती समर्थित आहेत?",
+    categoriesTitle: "श्रेण्या",
+    cat1: "सुरूवात", cat2:"ऑर्डर आणि डिलिव्हरी", cat3:"पेमेंट", cat4:"KYC आणि पडताळणी", cat5:"लॉजिस्टिक्स", cat6:"तांत्रिक मदत",
+    tutorialTitle:"ट्यूटोरियल", tutorialDesc:"प्रथम-वेळ वापरकर्त्यांसाठी जलद मार्गदर्शन.",
+    footerText:"अधिक हवे आहे? संपर्क पॅनेल वापरून तिकीट द्या किंवा WhatsApp वर चॅट करा.",
+    contactTitle:"संपर्क सहाय्य",
+    phoneText:"फोन? कॉल करा: +91 99999 99999",
+    quickLinksTitle:"जलद दुवे", link1:"रिफंड धोरण", link2:"रद्द धोरण", link3:"डिलिव्हरी अटी",
+    ticketTitle:"सपोर्ट तिकीट द्या", ticketDesc:"आपली समस्या वर्णन करा — आमची टीम लवकर प्रतिसाद देईल."
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'en';
+
+function updateLanguage(){
+  for(const key in langData[currentLang]){
+    if(document.getElementById(key)) document.getElementById(key).innerText = langData[currentLang][key];
+  }
+}
+
+function setLang(lang){
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  updateLanguage();
+}
+
+updateLanguage();
+
+// Modal
+const modal = document.getElementById('modal');
+document.getElementById('openTicket').addEventListener('click', ()=> modal.classList.add('open'));
+document.getElementById('closeModal').addEventListener('click', ()=> modal.classList.remove('open'));
+document.getElementById('submitTicket').addEventListener('click', ()=>{
+  const name = document.getElementById('name').value || 'Anonymous';
+  const phone = document.getElementById('phoneModal').value || 'Not provided';
+  const message = document.getElementById('message').value || '(no details)';
+  modal.classList.remove('open');
+  alert('Ticket submitted:\nName: '+name+'\nPhone: '+phone+'\nMessage: '+message+'\n\n(Demo only)');
+});
+
+// Basic search demo
+document.getElementById('searchBtn').addEventListener('click', ()=>{
+  const q = document.getElementById('search').value.trim();
+  if(!q) return alert('Type a search query');
+  alert('Searching help for: '+q+' (Demo only)');
+});
+</script>
+</body>
+</html>

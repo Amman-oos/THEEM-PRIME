@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FarmerShop Login (Aadhaar + OTP)</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" />
+  <link rel="stylesheet" href="farmer.html">
+  <style>
+    body{font-family:Arial,Helvetica,sans-serif;background:#f3f7f2;margin:0;display:flex;align-items:center;justify-content:center;height:100vh}
+    .box{background:#fff;padding:24px;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.08);width:360px}
+    h2{margin:0 0 12px;color:#2d572c}
+    input,select,button{width:100%;padding:10px;margin:8px 0;border-radius:8px;border:1px solid #ddd}
+    button{background:#56ab2f;color:#fff;border:none;cursor:pointer}
+    .small{font-size:13px;color:#b91c1c;margin-top:6px}
+  </style>
+  <link rel="stylesheet" href="login.css">
+  <link rel="stylesheet" href="farmer_home.html">
+</head>
+<body>
+  <div class="box">
+    <h2>👨‍🌾Farmer Login</h2>
+      <input type="text" placeholder="Enter your name" />
+    <input id="phone" placeholder="Mobile number" />
+    <button id="sendBtn">Send OTP</button>
+
+    <div id="otpSection" style="display:none">
+      <input id="otp" placeholder="Enter OTP" />
+      <input id="aadhaar" placeholder="Enter Aadhaar (12 digits)" maxlength="12" />
+      <input id="imageUpload" type="file" accept="image/*" />
+      <button id="verifyBtn">Verify & Login</button>
+      <div id="msg" class="small"></div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  let generatedOTP = null;
+
+  const dTable = [
+    [0,1,2,3,4,5,6,7,8,9],
+    [1,2,3,4,0,6,7,8,9,5],
+    [2,3,4,0,1,7,8,9,5,6],
+    [3,4,0,1,2,8,9,5,6,7],
+    [4,0,1,2,3,9,5,6,7,8],
+    [5,9,8,7,6,0,4,3,2,1],
+    [6,5,9,8,7,1,0,4,3,2],
+    [7,6,5,9,8,2,1,0,4,3],
+    [8,7,6,5,9,3,2,1,0,4],
+    [9,8,7,6,5,4,3,2,1,0]
+  ];
+
+  const pTable = [
+    [0,1,2,3,4,5,6,7,8,9],
+    [1,5,7,6,2,8,3,0,9,4],
+    [5,8,0,3,7,9,6,1,4,2],
+    [8,9,1,6,0,4,3,5,2,7],
+    [9,4,5,3,1,2,6,8,7,0],
+    [4,2,8,6,5,7,3,9,0,1],
+    [2,7,9,3,8,0,6,4,1,5],
+    [7,0,4,6,9,1,3,2,5,8]
+  ];
+
+  const invTable = [0,4,3,2,1,5,6,7,8,9];
+
+  function verhoeffValidate(numStr){
+    if(!/^\d+$/.test(numStr)) return false;
+    let c = 0;
+    const arr = numStr.split('').map(Number).reverse();
+    for(let i=0;i<arr.length;i++){
+      c = dTable[c][ pTable[(i % 8)][arr[i]] ];
+    }
+    return c === 0;
+  }
+
+  function showMsg(s, err){
+    const el = document.getElementById("msg");
+    el.style.color = err ? "#b91c1c" : "#0b6623";
+    el.innerText = s;
+  }
+
+  document.getElementById("sendBtn").addEventListener("click", ()=>{
+    const phone = document.getElementById("phone").value.trim();
+    if(!/^\d{10}$/.test(phone)){ showMsg("Enter valid 10-digit mobile number", true); return; }
+    generatedOTP = Math.floor(100000 + Math.random()*900000).toString();
+    alert("Your OTP is: " + generatedOTP);
+    document.getElementById("otpSection").style.display = "block";
+    showMsg("OTP sent (demo). Enter OTP, Aadhaar and upload image.", false);
+  });
+
+ document.getElementById("verifyBtn").addEventListener("click", ()=>{
+    const otp = document.getElementById("otp").value.trim();
+    const aad = document.getElementById("aadhaar").value.trim();
+    const fileInput = document.getElementById("imageUpload");
+
+    if(!generatedOTP){ showMsg("Please click Send OTP first", true); return; }
+    if(otp !== generatedOTP){ showMsg("Invalid OTP", true); return; }
+    if(!/^\d{12}$/.test(aad)){ showMsg("Aadhaar must be exactly 12 digits", true); return; }
+    if(!verhoeffValidate(aad)){ showMsg("Aadhaar failed checksum validation", true); return; }
+    if(!fileInput.files || fileInput.files.length === 0){ showMsg("Please upload an image (ID/photo)", true); return; }
+
+    showMsg("All checks passed. Logging in...", false);
+
+    // Redirect to farmer home
+    setTimeout(()=> {
+        location.href = "farmer_home.html";
+    }, 700);
+});
+
+
+})();
+</script>
+</body>
+</html>

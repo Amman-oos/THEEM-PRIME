@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fresh-Connect Home</title>
+  <link rel="stylesheet" href="home.css">
+  <link rel="stylesheet" href="login.html">
+</head>
+<body>
+  <header class="navbar">
+    <h2>Welcome, to Fresh-Connect</h2>
+    <input type="text" id="search" placeholder="Search crops..." onkeyup="searchCrops()">
+  </header>
+<nav>
+    
+    <a  href="dashboard.html"><img src="hamburger.png" alt="DASHBOARD">DASHBOARD</a >
+      <p>   </p>
+    <a href="account.html"  ><img src="account icon.png" alt="Account">Account</a>
+</nav >
+  <div class="categories">
+    <button onclick="filterCategory('Vegetable')">Vegetables</button>
+    <button onclick="filterCategory('Fruit')">Fruits</button>
+    <button onclick="filterCategory('All')">All</button>
+  </div>
+
+  <div id="cropContainer" class="crop-container"></div>
+
+  <script src="home.js"></script>
+</body>
+</html>

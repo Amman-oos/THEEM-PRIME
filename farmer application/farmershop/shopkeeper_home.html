@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fresh Connect — Add to Cart + Delivery Support Demo</title>
+<style>
+*{box-sizing:border-box;}
+body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background:#f5f7fb; color:#0f1724;}
+header{background:linear-gradient(90deg,#0ea5a4,#3b82f6); padding:18px; color:white;}
+.container{max-width:1100px;margin:24px auto;padding:0 18px;}
+h1{margin:0;font-size:20px;}
+p.lead{opacity:0.9;margin-top:6px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;margin-top:18px;}
+.card{background:linear-gradient(180deg,#fff,#fbfdff);border:1px solid #e6eef7;padding:12px;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,36,0.06);}
+.card img{width:100%;height:140px;object-fit:cover;border-radius:8px;}
+.card .title{font-weight:600;margin:8px 0 4px;}
+.card .meta{font-size:13px;color:#374151;}
+.card .row{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
+button.btn{border:0;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600;}
+button.primary{background:#10b981;color:white;}
+button.ghost{background:transparent;border:1px solid #c7d2fe;color:#1f2937;}
+.cart-btn{position:fixed;right:20px;bottom:20px;background:#111827;color:white;padding:12px 16px;border-radius:999px;box-shadow:0 10px 30px rgba(2,6,23,0.4);display:flex;gap:10px;align-items:center;}
+.cart-count{background:#ef4444;padding:4px 8px;border-radius:999px;font-weight:700;}
+.drawer{position:fixed;right:20px;bottom:80px;width:360px;max-height:70vh;background:white;border-radius:12px;box-shadow:0 25px 60px rgba(2,6,23,0.25);overflow:auto;border:1px solid #e6eef7;padding:12px;display:none;}
+.drawer.open{display:block;}
+.cart-item{display:flex;gap:10px;padding:8px 6px;border-bottom:1px dashed #eef2ff;}
+.cart-item img{width:64px;height:64px;border-radius:8px;object-fit:cover;}
+.cart-item .info{flex:1;}
+.cart-actions{display:flex;gap:8px;align-items:center;margin-top:6px;}
+.qty{display:inline-flex;align-items:center;border-radius:8px;border:1px solid #e5f0ff;padding:4px;}
+.qty button{border:0;background:transparent;padding:6px;cursor:pointer;font-weight:700;}
+.totals{padding:8px 6px;margin-top:8px;}
+.muted{color:#6b7280;font-size:13px;}
+.status-pill{display:inline-block;padding:6px 8px;border-radius:999px;background:#eef2ff;color:#0f1724;font-weight:700;}
+@media(max-width:700px){.drawer{right:10px;left:10px;width:auto;bottom:70px;}}
+</style>
+</head>
+<body>
+<header>
+<div class="container" style="display:flex;justify-content:space-between;align-items:center">
+<div>
+<h1>Fresh Connect — Delivery-enabled Demo</h1>
+<p class="lead">Add-to-Cart + Order creation, confirmation & delivery tracking (demo)</p>
+</div>
+<div class="muted">Demo: localStorage cart • Mock backend</div>
+</div>
+</header>
+
+<main class="container">
+<section>
+<h2 style="margin-top:12px">Available Produce</h2>
+<div id="products" class="grid" aria-live="polite"></div>
+</section>
+
+<section style="margin-top:24px;">
+<h2>Order Tracking</h2>
+<div id="orderStatusArea" class="card" style="padding:12px">
+<div id="orderInfo" class="muted">No recent order — checkout to create an order and get tracking.</div>
+</div>
+</section>
+</main>
+
+<button id="cartToggle" class="cart-btn" aria-expanded="false" aria-controls="cartDrawer">
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<div>Cart</div>
+<div id="cartCount" class="cart-count">0</div>
+</button>
+
+<aside id="cartDrawer" class="drawer" role="dialog" aria-label="Shopping cart">
+<h3 style="margin:4px 0">Your Cart</h3>
+<div id="cartItems"></div>
+<div class="totals">
+<div style="display:flex;justify-content:space-between;align-items:center"><div class="muted">Subtotal</div><div id="subtotal">₹0</div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><div class="muted">GST (5%)</div><div id="tax">₹0</div></div>
+<div style="display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-top:8px"><div>Total</div><div id="total">₹0</div></div>
+<div style="margin-top:10px;display:flex;gap:8px">
+<button id="checkoutBtn" class="btn primary" style="flex:1">Checkout (Create Order)</button>
+<button onclick="clearCart()" class="btn ghost">Clear</button>
+</div>
+</div>
+</aside>
+
+<script>
+const PRODUCTS = [
+{id:'p-apple-1', name:'Fresh Apples (10 kg)', price:1200, unit:'10kg', img:'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=60'},
+{id:'p-tomato-1', name:'Tomatoes (crate)', price:450, unit:'crate', img:'https://images.unsplash.com/photo-1567306301408-9b74779a11af?auto=format&fit=crop&w=800&q=60'},
+{id:'p-green-1', name:'Green Leafy Veg (5 kg)', price:600, unit:'5kg', img:'https://images.unsplash.com/photo-1506806732259-39c2d0268443?auto=format&fit=crop&w=800&q=60'},
+{id:'p-potato-1', name:'Potatoes (50 kg sack)', price:2500, unit:'50kg', img:'https://plus.unsplash.com/premium_photo-1675365779531-031dfdcdf947?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cG90YXRvfGVufDB8fDB8fHww'},
+];
+
+let CART = loadCart();
+
+function renderProducts(){
+  const el = document.getElementById('products'); el.innerHTML='';
+  for(const p of PRODUCTS){
+    const card = document.createElement('div'); card.className='card';
+    const rowDiv = document.createElement('div'); rowDiv.className='row';
+    rowDiv.innerHTML = '<div class="muted">In stock: Usually available</div>';
+    const btn = document.createElement('button'); btn.className='btn primary'; btn.textContent='Add';
+    btn.addEventListener('click', function(){ addToCart(p.id, btn); });
+    rowDiv.appendChild(btn);
+    card.innerHTML = `
+      <img src="${p.img}" alt="${p.name}">
+      <div class="title">${p.name}</div>
+      <div class="meta">Unit: ${p.unit} • Price: ₹${p.price.toLocaleString()}</div>
+    `;
+    card.appendChild(rowDiv);
+    el.appendChild(card);
+  }
+}
+
+function saveCart(){ localStorage.setItem('fresh_connect_cart_v1', JSON.stringify(CART)); updateCartBadge(); }
+function loadCart(){ try{ const raw = localStorage.getItem('fresh_connect_cart_v1'); return raw ? JSON.parse(raw) : {}; }catch(e){return {}; } }
+function updateCartBadge(){ const countEl = document.getElementById('cartCount'); const qty = Object.values(CART).reduce((s,i)=>s + (i.qty||0),0); countEl.textContent = qty; }
+
+function addToCart(productId, btn){ 
+  const prod = PRODUCTS.find(p=>p.id===productId);
+  if(!prod) return alert('Product not found');
+  if(CART[productId]) CART[productId].qty += 1;
+  else CART[productId]={id:prod.id,name:prod.name,price:prod.price,img:prod.img,qty:1};
+  saveCart(); renderCart();
+  if(btn){ btn.textContent='Added'; setTimeout(()=>btn.textContent='Add',700); }
+}
+
+function setQty(productId, qty){ if(!CART[productId]) return; qty=Math.max(0, Math.floor(qty)); if(qty===0){ delete CART[productId]; } else { CART[productId].qty=qty; } saveCart(); renderCart(); }
+function updateQty(productId, delta){ if(!CART[productId]) return; setQty(productId,CART[productId].qty+delta); }
+function removeItem(productId){ if(CART[productId]) delete CART[productId]; saveCart(); renderCart(); }
+function clearCart(){ if(confirm('Clear cart?')){ CART={}; saveCart(); renderCart(); } }
+
+function renderCart(){
+  const container=document.getElementById('cartItems'); container.innerHTML='';
+  const keys=Object.keys(CART);
+  if(keys.length===0){ container.innerHTML='<div class="muted">Your cart is empty. Add produce from the list.</div>'; document.getElementById('subtotal').textContent='₹0'; document.getElementById('tax').textContent='₹0'; document.getElementById('total').textContent='₹0'; updateCartBadge(); return; }
+  let subtotal=0;
+  for(const id of keys){
+    const it=CART[id]; subtotal+=it.price*it.qty;
+    const item=document.createElement('div'); item.className='cart-item';
+    item.innerHTML=`<img src="${it.img}" alt="${it.name}"><div class="info">
+    <div style="font-weight:700">${it.name}</div>
+    <div class="muted">₹${it.price.toLocaleString()} • Qty: ${it.qty}</div>
+    <div class="cart-actions">
+    <div class="qty" role="group" aria-label="Quantity controls">
+    <button onclick="updateQty('${it.id}',-1)" aria-label="Decrease">−</button>
+    <div style="padding:0 8px;min-width:26px;text-align:center">${it.qty}</div>
+    <button onclick="updateQty('${it.id}',1)" aria-label="Increase">+</button>
+    </div>
+    <button class="btn ghost" onclick="removeItem('${it.id}')">Remove</button>
+    </div></div>`;
+    container.appendChild(item);
+  }
+  const tax=Math.round(subtotal*0.05); const total=subtotal+tax;
+  document.getElementById('subtotal').textContent=`₹${subtotal.toLocaleString()}`;
+  document.getElementById('tax').textContent=`₹${tax.toLocaleString()}`;
+  document.getElementById('total').textContent=`₹${total.toLocaleString()}`;
+  updateCartBadge();
+}
+
+document.getElementById('cartToggle').addEventListener('click', ()=>{
+  const open=document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartToggle').setAttribute('aria-expanded',open);
+});
+
+// Mock backend for demo
+async function fakeOrderAPI(payload){
+  return new Promise(resolve=>{
+    setTimeout(()=>resolve({order:{id:'O'+Date.now(), status:'Pending', ...payload}}),500);
+  });
+}
+
+document.getElementById('checkoutBtn').addEventListener('click', async ()=>{
+  if(Object.keys(CART).length===0) return alert('Cart is empty');
+  const items=Object.values(CART).map(i=>({productId:i.id,name:i.name,price:i.price,qty:i.qty}));
+  const subtotal=parseInt(document.getElementById('subtotal').textContent.replace(/[₹,]/g,''))||0;
+  const total=parseInt(document.getElementById('total').textContent.replace(/[₹,]/g,''))||0;
+  const orderPayload={buyerType:'hotel', buyerName:'Demo Hotel', buyerContact:'+91-99999-99999', deliveryAddress:'Demo Hotel Address, City, PIN', items, subtotal, total};
+  try{
+    const data=await fakeOrderAPI(orderPayload);
+    showOrderConfirmation(data.order);
+    CART={}; saveCart(); renderCart();
+  }catch(e){ console.error(e); alert('Failed to create order'); }
+});
+
+function showOrderConfirmation(order){
+  const el=document.getElementById('orderInfo');
+  el.innerHTML=`
+  <div style="display:flex;justify-content:space-between;align-items:center">
+  <div>Order <strong>#${order.id}</strong></div>
+  <div class="status-pill">${order.status}</div>
+  </div>
+  <div class="muted" style="margin-top:8px">Buyer: ${order.buyerName} • ${order.buyerContact}</div>
+  <div style="margin-top:8px"><strong>Delivery:</strong> ${order.deliveryAddress}</div>
+  <div style="margin-top:8px"><strong>Items:</strong></div>
+  <ul>${order.items.map(it=>`<li>${it.qty} × ${it.name} — ₹${(it.price*it.qty).toLocaleString()}</li>`).join('')}</ul>
+  <div style="margin-top:8px;display:flex;gap:8px">
+    <button class="btn primary" onclick="refreshOrder('${order.id}')">Refresh Status</button>
+    <button class="btn ghost" onclick="copyLink('${order.id}')">Copy Track Link</button>
+  </div>
+  `;
+}
+
+async function refreshOrder(orderId){
+  alert('For demo, status is static: Pending');
+}
+
+function copyLink(orderId){
+  const url=`${location.origin}/track.html?order=${orderId}`;
+  navigator.clipboard?.writeText(url);
+  alert('Track link copied: '+url);
+}
+
+// Initial render
+renderProducts(); renderCart();
+</script>
+</body>
+</html>

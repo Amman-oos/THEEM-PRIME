@@ -1,0 +1,31 @@
+body{font-family:Segoe UI,Roboto,Arial,sans-serif;background:#f3f7f2;margin:0;padding:0}
+.login-box{width:360px;margin:80px auto;background:#fff;padding:24px;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.08);text-align:center}
+.login-box h2{color:#2d572c;margin-bottom:12px}
+.login-box input{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:8px}
+.login-box button{width:100%;padding:12px;margin-top:6px;background:linear-gradient(90deg,#56ab2f,#a8e063);color:#fff;border:0;border-radius:10px;cursor:pointer}
+.msg{color:#b91c1c;margin-top:8px}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:#56ab2f;color:#fff}
+main{max-width:1000px;margin:30px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.06)}
+main h2{color:#2d572c;margin-bottom:20px;text-align:center}
+main p{font-size:16px;margin-bottom:30px;text-align:center}
+.crop-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px}
+.crop-card{background:#eaf4ea;padding:15px;border-radius:12px;}
+body {
+  font-family: Segoe UI, Roboto, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-image: url('normal.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 658px;
+}
+.login-box {
+  width: 360px;
+  margin: 180px auto;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  text-align: center;
+}

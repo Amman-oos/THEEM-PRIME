@@ -1,0 +1,108 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f5f5f5;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background: #56ab2f;
+  color: white;
+}
+
+.navbar h2 {
+  margin: 0;
+}
+
+.navbar .nav-links a {
+  color: white;
+  margin-left: 15px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.navbar .nav-links a:hover {
+  text-decoration: underline;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+h2 {
+  color: #2d572c;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+p {
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.crop-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+}
+
+.crop-card {
+  background: #eaf4ea;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  transition: 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.crop-card:hover {
+  transform: translateY(-5px);
+}
+
+.crop-card h3 {
+  margin: 10px 0;
+  color: #2d572c;
+}
+
+.crop-card p {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+.crop-card button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 6px;
+  background: #56ab2f;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.crop-card button:hover {
+  background: #3c7c20;
+}
+
+a.back-link {
+  display: inline-block;
+  margin-top: 20px;
+  color: #56ab2f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a.back-link:hover {
+  text-decoration: underline;
+}

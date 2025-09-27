@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer Dashboard</title>
+  <link rel="stylesheet" href="farmer.css">
+  <link rel="stylesheet" href="farmer_login.html">
+</head>
+<body>
+  <div class="container">
+    <h2>Welcome, Farmer 👨‍🌾</h2>
+  <h3>Add Your Crops</h3>
+<input type="text" id="cropName" placeholder="Crop Name">
+<input type="number" id="qty" placeholder="Quantity (kg)">
+<input type="number" id="price" placeholder="Price per kg">
+<input type="text" id="location" placeholder="Location">
+<input type="date" id="date">
+<button onclick="addCrop()">Add Crop</button>
+
+<h3>Your Crops</h3>
+<table id="cropTable">
+  <tr>
+    <th>Crop</th>
+    <th>Qty (kg)</th>
+    <th>Price</th>
+    <th>Location</th>
+    <th>Harvest Date</th>
+    <th>Action</th>
+  </tr>
+</table>
+
+
+  </div>
+  <script src="farmer.js"></script>
+</body>
+</html>
